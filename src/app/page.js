@@ -4,7 +4,7 @@ export default function Home() {
   console.log("page");
 
   // https://bum-developer.tistory.com/
-  axios.get("https://lomen.co.kr/").then((res) => {
+  axios.get("http://210.116.101.168:3012/").then((res) => {
     console.log(res.data);
   });
 

@@ -1,13 +1,9 @@
-import Setting from "@/setting";
+"use client";
 
 export default function RootLayout({ children }) {
-  console.log("layout");
-
   return (
     <html lang="en">
-      <body>
-        <Setting>{children}</Setting>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

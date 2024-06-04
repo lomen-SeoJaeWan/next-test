@@ -1,46 +1,76 @@
-import { useContext, useState } from "react";
+import { cloneElement, useContext, useEffect, useState } from "react";
 import { FunnelContext } from "./useFunnel";
+import useHistory from "./utils/useHistory/useHistory";
 
 const FunnelStep = (props) => {
-  const { name, children } = props;
-  const { currentStep } = useContext(FunnelContext);
+  const {
+    name,
+    children,
+    onNext = () => {},
+    onPrev = () => {},
+    onUpdate = () => {},
+  } = props;
+  const { currentStep, nextStep, prevStep, updateStep } =
+    useContext(FunnelContext);
+
+  const handleNextStep = (...data) => {
+    onNext(...data);
+    nextStep();
+  };
+
+  const handlePrevStep = (...data) => {
+    onPrev(...data);
+    prevStep();
+  };
+
+  const handleUpdateStep = (name, data) => {
+    onUpdate(data);
+    updateStep(name);
+  };
 
   if (currentStep !== name) return null;
-  return children;
+  return cloneElement(children, {
+    onNext: handleNextStep,
+    onPrev: handlePrevStep,
+    onUpdate: handleUpdateStep,
+  });
 };
 
 const Funnel = (props) => {
   const { children, steps } = props;
   const [currentStep, setCurrentStep] = useState(0);
 
-  const nextStep = () => {
-    setCurrentStep((prevStep) => {
-      const next = prevStep + 1;
+  const handlePopState = (e) => {
+    const state = e.state?.funnelStep || 0;
 
-      if (next < steps.length) {
-        return next;
-      } else {
-        return prevStep;
-      }
-    });
+    setCurrentStep(state);
+  };
+
+  const pushState = useHistory(handlePopState);
+
+  const nextStep = () => {
+    const next = currentStep + 1;
+
+    if (next < steps.length) {
+      pushState({ funnelStep: next });
+      setCurrentStep(next);
+    }
   };
 
   const prevStep = () => {
-    setCurrentStep((prevStep) => {
-      const next = prevStep - 1;
+    const prev = currentStep - 1;
 
-      if (next >= 0) {
-        return next;
-      } else {
-        return prevStep;
-      }
-    });
+    if (prev >= 0) {
+      pushState({ funnelStep: prev });
+      setCurrentStep(prev);
+    }
   };
 
   const updateStep = (step) => {
     const index = steps.indexOf(step);
 
     if (index !== -1) {
+      pushState({ funnelStep: index });
       setCurrentStep(index);
     }
   };

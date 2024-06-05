@@ -24,13 +24,7 @@ const Other = () => {
 
   return (
     <>
-      <Link href="/">홈으로</Link>
-      <Link href="/other/child">자식 페이지 이동</Link>
-      <a href={window.location.href}>현재 URL</a>
-      <button onClick={() => pushState()}>pushState</button>
-      <button onClick={() => replaceState()}>replaceState</button>
-      <button onClick={() => router.push("/")}>다른 페이지 이동</button>
-      <button onClick={update}>업데이트</button>
+      <h1>아 페이지다!</h1>
     </>
   );
 };

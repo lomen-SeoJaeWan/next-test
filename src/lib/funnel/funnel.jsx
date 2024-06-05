@@ -1,5 +1,5 @@
-import { cloneElement, useContext, useEffect, useState } from "react";
-import { FunnelContext } from "./useFunnel";
+import { cloneElement, useState } from "react";
+import useFunnel, { FunnelContext } from "./useFunnel";
 import useHistory from "./utils/useHistory/useHistory";
 
 const FunnelStep = (props) => {
@@ -10,8 +10,7 @@ const FunnelStep = (props) => {
     onPrev = () => {},
     onUpdate = () => {},
   } = props;
-  const { currentStep, nextStep, prevStep, updateStep } =
-    useContext(FunnelContext);
+  const { currentStep, nextStep, prevStep, updateStep } = useFunnel();
 
   const handleNextStep = (...data) => {
     onNext(...data);
